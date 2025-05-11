@@ -1,92 +1,59 @@
 body {
-  margin: 0;
-  padding: 0;
   background-color: #111;
   color: #fff;
-  font-family: 'Arial', sans-serif;
-}
-
-.container {
-  max-width: 600px;
-  margin: 40px auto;
+  font-family: Arial, sans-serif;
+  text-align: center;
   padding: 20px;
+}
+.blue-border {
+  border: 2px solid #00f0ff;
+  padding: 20px;
+  border-radius: 10px;
   background-color: #1a1a1a;
-  border: 2px solid #0af;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 170, 255, 0.2);
+  max-width: 600px;
+  margin: auto;
 }
-
-h1 {
-  text-align: center;
-  color: #0af;
-  margin-bottom: 20px;
+#cover-prompt {
+  width: 90%;
+  height: 100px;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
-
-label {
-  display: block;
-  margin-top: 20px;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="file"] {
-  width: 100%;
-  margin-top: 8px;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  background-color: #333;
-  color: #fff;
-}
-
-button {
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  background-color: #0af;
+#generate-cover-btn,
+.pay-btn {
+  padding: 10px 20px;
+  background-color: #00f0ff;
   color: #000;
-  transition: background 0.3s;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
-
-button:hover {
-  background-color: #09c;
-}
-
-.output-display {
-  width: 100%;
-  height: 500px;
-  margin: 20px 0;
-  background-color: #222;
-  border: 2px dashed #0af;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  font-style: italic;
-  text-align: center;
-  overflow: hidden;
-}
-
-.loading-text {
-  text-align: center;
-  margin-top: 10px;
-  font-style: italic;
-  color: #0af;
-}
-
 .hidden {
   display: none;
 }
-
-.advisor {
-  display: block;
-  margin: 20px auto 0;
-  max-width: 100%;
-  border-radius: 8px;
+.flame-box {
+  border: 2px solid #00f0ff;
+  padding: 20px;
+  margin-top: 20px;
+  background: radial-gradient(circle, rgba(0, 0, 50, 1) 0%, rgba(0, 0, 0, 1) 100%);
+  box-shadow: 0 0 20px #00f0ff;
 }
+.flame-box h2 {
+  color: #00f0ff;
+}
+.pay-btn {
+  margin-top: 15px;
+  display: inline-block;
+}
+#cta-banner {
+  background-color: #001f33;
+  padding: 10px;
+  margin-bottom: 15px;
+  color: #00f0ff;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00f0ff;
+}
+
 
