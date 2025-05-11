@@ -1,41 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cover Generator</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <div class="container">
-    <h1>🎨 Cover Generator</h1>
-
-    <!-- Output Area -->
-    <div class="output-display" id="outputDisplay">
-      <p>Your album cover will appear here</p>
-    </div>
-
-    <!-- Loading Indicator -->
-    <div id="loadingText" class="loading-text hidden">⏳ Generating your cover...</div>
-
-    <!-- Input prompt -->
-    <label for="textPrompt">Enter Album Theme or Title:</label>
-    <input type="text" id="textPrompt" placeholder="E.g. Heartbreak in Brooklyn" />
-
-    <!-- Upload -->
-    <label for="imageUpload">Upload Optional Image:</label>
-    <input type="file" id="imageUpload" accept="image/*" />
-
-    <!-- Generate + Save -->
-    <button id="generateBtn">Generate (30 sec)</button>
-    <button id="saveBtn">💾 Save Cover</button>
-
-    <!-- Advisor Toggle -->
-    <button id="toggleAdvisorBtn">👁️ Show Advisor</button>
-    <img src="advisor.jpg" id="advisorImage" class="advisor hidden" alt="Advisor" />
+<!-- index.html -->
+<div id="generator-container" class="blue-border">
+  <h1>KhaoticSounds Generator</h1>
+  <div id="input-section">
+    <textarea id="user-input" placeholder="Enter your prompt..."></textarea>
+    <button id="generate-btn">Generate</button>
   </div>
+  <div id="output-section"></div>
+  <div id="cooldown-message" class="hidden">
+    <div class="flame-box">
+      <h2>🔥 KhaoticSounds Premium</h2>
+      <p>You've hit your limit! You can generate again in <span id="cooldown-timer"></span>.</p>
+      <p>Upgrade now to unlock:</p>
+      <ul>
+        <li>Unlimited Lyric Generations</li>
+        <li>Unlimited Album Cover Generations</li>
+        <li>Exclusive Beat Drops Monthly</li>
+      </ul>
+      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="pay-btn">Unlock Premium</a>
+    </div>
+  </div>
+</div>
 
-  <script src="script.js"></script>
-</body>
-</html>
+<!-- style.css -->
+<style>
+  body {
+    background-color: #111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  .blue-border {
+    border: 2px solid #00f0ff;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #1a1a1a;
+    max-width: 600px;
+    margin: auto;
+  }
+  #user-input {
+    width: 90%;
+    height: 100px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  #generate-btn, .pay-btn {
+    padding: 10px 20px;
+    background-color: #00f0ff;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .hidden {
+    display: none;
+  }
+  .flame-box {
+    border: 2px solid #00f0ff;
+    padding: 20px;
+    margin-top: 20px;
+    background: radial-gradient(circle, rgba(0,0,50,1) 0%, rgba(0,0,0,1) 100%);
+    box-shadow: 0 0 20px #00f0ff;
+  }
+  .flame-box h2 {
+    color: #00f0ff;
+  }
+  .pay-btn {
+    margin-top: 15px;
+    display: inline-block;
+  }
+</style>
+
+<!-- script.js -->
+<script>
+  let generationCount = 0;
+  let nextAllowedTime = null;
+
+  function updateCooldownTimer() {
+    const remaining = Math.max(0, Math.floor((nextAllowedTime - Date.now()) / 1000));
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+    document.getElementById('cooldown-timer').textContent = `${minutes}m ${seconds}s`;
+    if (remaining <= 0) {
+      document.getElementById('cooldown-message').classList.add('hidden');
+      document.getElementById('input-section').classList.remove('hidden');
+      generationCount = 0;
+    } else {
+      setTimeout(updateCooldownTimer, 1000);
+    }
+  }
+
+  document.getElementById('generate-btn').addEventListener('click', () => {
+    if (generationCount >= 1) {
+      if (!nextAllowedTime) nextAllowedTime = Date.now() + 3600000;
+      document.getElementById('input-section').classList.add('hidden');
+      document.getElementById('cooldown-message').classList.remove('hidden');
+      updateCooldownTimer();
+      return;
+    }
+
+    // Call to your AI function goes here (e.g., fetch or API request)
+    const userInput = document.getElementById('user-input').value;
+    document.getElementById('output-section').innerHTML = `<p>Generated output for: <em>${userInput}</em></p>`;
+
+    generationCount++;
+  });
+</script>
