@@ -1,6 +1,9 @@
 <!-- index.html -->
 <div id="generator-container" class="blue-border">
   <h1>KhaoticSounds Generator</h1>
+  <div id="cta-banner">
+    <p><strong>Drop your heat. Get noticed. Only 24 hours to shine.</strong></p>
+  </div>
   <div id="input-section">
     <textarea id="user-input" placeholder="Enter your prompt..."></textarea>
     <button id="generate-btn">Generate</button>
@@ -12,16 +15,15 @@
       <p>You've hit your limit! You can generate again in <span id="cooldown-timer"></span>.</p>
       <p>Upgrade now to unlock:</p>
       <ul>
-        <li>Unlimited Lyric Generations</li>
-        <li>Unlimited Album Cover Generations</li>
-        <li>Exclusive Beat Drops Monthly</li>
+        <li>🎤 Unlimited Lyric Generations</li>
+        <li>🎨 Unlimited Album Cover Generations</li>
+        <li>🔥 Exclusive Beat Drops Monthly</li>
       </ul>
       <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="pay-btn">Unlock Premium</a>
     </div>
   </div>
 </div>
 
-<!-- style.css -->
 <style>
   body {
     background-color: #111;
@@ -70,12 +72,20 @@
     margin-top: 15px;
     display: inline-block;
   }
+  #cta-banner {
+    background-color: #001f33;
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #00f0ff;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00f0ff;
+  }
 </style>
 
-<!-- script.js -->
 <script>
-  let generationCount = 0;
-  let nextAllowedTime = null;
+  let generationCount = localStorage.getItem('generationCount') || 0;
+  let nextAllowedTime = localStorage.getItem('nextAllowedTime');
 
   function updateCooldownTimer() {
     const remaining = Math.max(0, Math.floor((nextAllowedTime - Date.now()) / 1000));
@@ -86,6 +96,7 @@
       document.getElementById('cooldown-message').classList.add('hidden');
       document.getElementById('input-section').classList.remove('hidden');
       generationCount = 0;
+      localStorage.setItem('generationCount', generationCount);
     } else {
       setTimeout(updateCooldownTimer, 1000);
     }
@@ -93,17 +104,20 @@
 
   document.getElementById('generate-btn').addEventListener('click', () => {
     if (generationCount >= 1) {
-      if (!nextAllowedTime) nextAllowedTime = Date.now() + 3600000;
+      if (!nextAllowedTime) {
+        nextAllowedTime = Date.now() + 3600000;
+        localStorage.setItem('nextAllowedTime', nextAllowedTime);
+      }
       document.getElementById('input-section').classList.add('hidden');
       document.getElementById('cooldown-message').classList.remove('hidden');
       updateCooldownTimer();
       return;
     }
 
-    // Call to your AI function goes here (e.g., fetch or API request)
     const userInput = document.getElementById('user-input').value;
     document.getElementById('output-section').innerHTML = `<p>Generated output for: <em>${userInput}</em></p>`;
 
     generationCount++;
+    localStorage.setItem('generationCount', generationCount);
   });
 </script>
