@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Album Generator - Test02</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>🎨 AI Album Cover Generator</h1>
+
+    <!-- Display Output Image -->
+    <div class="output-display" id="outputDisplay">
+      <p>Your album cover will appear here</p>
+    </div>
+
+    <!-- Prompt Input -->
+    <label for="textPrompt">Enter Album Theme or Title:</label>
+    <input type="text" id="textPrompt" placeholder="E.g. Sad Trap Vibes in Space" />
+
+    <!-- Upload Image -->
+    <label for="imageUpload">Upload Optional Image:</label>
+    <input type="file" id="imageUpload" accept="image/*" />
+
+    <!-- Generate Button -->
+    <button id="generateBtn">Generate (30 sec)</button>
+
+    <!-- Save Button -->
+    <button id="saveBtn">💾 Save Cover</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
