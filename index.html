@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KhaoticSounds Album Cover Generator</title>
+  <title>Album Cover Generator</title>
   <style>
     body {
       background-color: #111;
@@ -20,14 +20,15 @@
       max-width: 600px;
       margin: auto;
     }
-    #cover-prompt {
+    #cover-prompt, #cover-upload {
       width: 90%;
-      height: 100px;
       margin-bottom: 10px;
       font-size: 16px;
     }
-    #generate-cover-btn,
-    .pay-btn {
+    #cover-prompt {
+      height: 100px;
+    }
+    #generate-cover-btn, .pay-btn, #save-btn {
       padding: 10px 20px;
       background-color: #00f0ff;
       color: #000;
@@ -35,6 +36,7 @@
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
+      margin: 5px;
     }
     .hidden {
       display: none;
@@ -62,19 +64,35 @@
       font-weight: bold;
       box-shadow: 0 0 10px #00f0ff;
     }
+    #cover-output-section img {
+      max-width: 100%;
+      position: relative;
+    }
+    .advisory-label {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 80px;
+    }
+    .output-wrapper {
+      position: relative;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
   <div id="cover-generator-container" class="blue-border">
-    <h1>KhaoticSounds Album Cover Generator</h1>
     <div id="cta-banner">
       <p><strong>Create the cover. Complete the vision. One free try every hour.</strong></p>
     </div>
     <div id="cover-input-section">
-      <textarea id="cover-prompt" placeholder="Describe your album cover..."></textarea>
+      <textarea id="cover-prompt" placeholder="Describe your album cover..."></textarea><br>
+      <input type="file" id="cover-upload" accept="image/*" /><br>
+      <label><input type="checkbox" id="advisory-toggle" /> Add Parental Advisory</label><br>
       <button id="generate-cover-btn">Generate Cover</button>
     </div>
     <div id="cover-output-section"></div>
+    <button id="save-btn" class="hidden">Save Image</button>
     <div id="cover-cooldown-message" class="hidden">
       <div class="flame-box">
         <h2>🔥 KhaoticSounds Premium</h2>
@@ -89,7 +107,6 @@
       </div>
     </div>
   </div>
-
   <script>
     let coverGenerationCount = localStorage.getItem('coverGenerationCount') || 0;
     let coverNextAllowedTime = localStorage.getItem('coverNextAllowedTime');
@@ -109,7 +126,7 @@
       }
     }
 
-    document.getElementById('generate-cover-btn').addEventListener('click', () => {
+    document.getElementById('generate-cover-btn').addEventListener('click', async () => {
       if (coverGenerationCount >= 1) {
         if (!coverNextAllowedTime) {
           coverNextAllowedTime = Date.now() + 3600000;
@@ -121,11 +138,56 @@
         return;
       }
 
-      const coverPrompt = document.getElementById('cover-prompt').value;
-      document.getElementById('cover-output-section').innerHTML = `<p>Generated album cover for: <em>${coverPrompt}</em></p>`;
+      const prompt = document.getElementById('cover-prompt').value;
+      const showAdvisory = document.getElementById('advisory-toggle').checked;
+      const outputSection = document.getElementById('cover-output-section');
+      const saveBtn = document.getElementById('save-btn');
+
+      outputSection.innerHTML = '<p>Generating image...</p>';
+
+      // Replace this with actual OpenAI API request
+      // const response = await fetch('YOUR_BACKEND_ENDPOINT', { method: 'POST', body: JSON.stringify({ prompt }) })
+      // const imageUrl = (await response.json()).url;
+      const imageUrl = 'https://via.placeholder.com/512x512.png?text=AI+Album+Cover'; // Placeholder image
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'output-wrapper';
+
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = 'Generated Cover';
+
+      wrapper.appendChild(img);
+
+      if (showAdvisory) {
+        const advisory = document.createElement('img');
+        advisory.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Parental_Advisory_label.svg/320px-Parental_Advisory_label.svg.png';
+        advisory.className = 'advisory-label';
+        wrapper.appendChild(advisory);
+      }
+
+      outputSection.innerHTML = '';
+      outputSection.appendChild(wrapper);
+      saveBtn.classList.remove('hidden');
 
       coverGenerationCount++;
       localStorage.setItem('coverGenerationCount', coverGenerationCount);
+    });
+
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const canvas = document.createElement('canvas');
+      const img = document.querySelector('#cover-output-section img');
+      if (!img) return;
+
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = 'album_cover.png';
+      a.click();
     });
   </script>
 </body>
