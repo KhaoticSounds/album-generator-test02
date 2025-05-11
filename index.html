@@ -1,124 +1,133 @@
-<!-- test02: Album Cover Generator with Paywall -->
-<div id="cover-generator-container" class="blue-border">
-  <h1>KhaoticSounds Album Cover Generator</h1>
-  <div id="cta-banner">
-    <p><strong>Create the cover. Complete the vision. One free try every hour.</strong></p>
-  </div>
-  <div id="cover-input-section">
-    <textarea id="cover-prompt" placeholder="Describe your album cover..."></textarea>
-    <button id="generate-cover-btn">Generate Cover</button>
-  </div>
-  <div id="cover-output-section"></div>
-  <div id="cover-cooldown-message" class="hidden">
-    <div class="flame-box">
-      <h2>🔥 KhaoticSounds Premium</h2>
-      <p>You've hit your limit! You can generate again in <span id="cover-cooldown-timer"></span>.</p>
-      <p>Upgrade now to unlock:</p>
-      <ul>
-        <li>🎨 Unlimited Album Cover Generations</li>
-        <li>🎤 Unlimited Lyric Generations</li>
-        <li>🔥 Exclusive Beat Drops Monthly</li>
-      </ul>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="pay-btn">Unlock Premium</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KhaoticSounds Album Cover Generator</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .blue-border {
+      border: 2px solid #00f0ff;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #1a1a1a;
+      max-width: 600px;
+      margin: auto;
+    }
+    #cover-prompt {
+      width: 90%;
+      height: 100px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    #generate-cover-btn,
+    .pay-btn {
+      padding: 10px 20px;
+      background-color: #00f0ff;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .flame-box {
+      border: 2px solid #00f0ff;
+      padding: 20px;
+      margin-top: 20px;
+      background: radial-gradient(circle, rgba(0, 0, 50, 1) 0%, rgba(0, 0, 0, 1) 100%);
+      box-shadow: 0 0 20px #00f0ff;
+    }
+    .flame-box h2 {
+      color: #00f0ff;
+    }
+    .pay-btn {
+      margin-top: 15px;
+      display: inline-block;
+    }
+    #cta-banner {
+      background-color: #001f33;
+      padding: 10px;
+      margin-bottom: 15px;
+      color: #00f0ff;
+      border-radius: 5px;
+      font-weight: bold;
+      box-shadow: 0 0 10px #00f0ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="cover-generator-container" class="blue-border">
+    <h1>KhaoticSounds Album Cover Generator</h1>
+    <div id="cta-banner">
+      <p><strong>Create the cover. Complete the vision. One free try every hour.</strong></p>
+    </div>
+    <div id="cover-input-section">
+      <textarea id="cover-prompt" placeholder="Describe your album cover..."></textarea>
+      <button id="generate-cover-btn">Generate Cover</button>
+    </div>
+    <div id="cover-output-section"></div>
+    <div id="cover-cooldown-message" class="hidden">
+      <div class="flame-box">
+        <h2>🔥 KhaoticSounds Premium</h2>
+        <p>You've hit your limit! You can generate again in <span id="cover-cooldown-timer"></span>.</p>
+        <p>Upgrade now to unlock:</p>
+        <ul>
+          <li>🎨 Unlimited Album Cover Generations</li>
+          <li>🎤 Unlimited Lyric Generations</li>
+          <li>🔥 Exclusive Beat Drops Monthly</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="pay-btn">Unlock Premium</a>
+      </div>
     </div>
   </div>
-</div>
 
-<style>
-  body {
-    background-color: #111;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-  }
-  .blue-border {
-    border: 2px solid #00f0ff;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #1a1a1a;
-    max-width: 600px;
-    margin: auto;
-  }
-  #cover-prompt {
-    width: 90%;
-    height: 100px;
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-  #generate-cover-btn, .pay-btn {
-    padding: 10px 20px;
-    background-color: #00f0ff;
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .hidden {
-    display: none;
-  }
-  .flame-box {
-    border: 2px solid #00f0ff;
-    padding: 20px;
-    margin-top: 20px;
-    background: radial-gradient(circle, rgba(0,0,50,1) 0%, rgba(0,0,0,1) 100%);
-    box-shadow: 0 0 20px #00f0ff;
-  }
-  .flame-box h2 {
-    color: #00f0ff;
-  }
-  .pay-btn {
-    margin-top: 15px;
-    display: inline-block;
-  }
-  #cta-banner {
-    background-color: #001f33;
-    padding: 10px;
-    margin-bottom: 15px;
-    color: #00f0ff;
-    border-radius: 5px;
-    font-weight: bold;
-    box-shadow: 0 0 10px #00f0ff;
-  }
-</style>
+  <script>
+    let coverGenerationCount = localStorage.getItem('coverGenerationCount') || 0;
+    let coverNextAllowedTime = localStorage.getItem('coverNextAllowedTime');
 
-<script>
-  let coverGenerationCount = localStorage.getItem('coverGenerationCount') || 0;
-  let coverNextAllowedTime = localStorage.getItem('coverNextAllowedTime');
-
-  function updateCoverCooldownTimer() {
-    const remaining = Math.max(0, Math.floor((coverNextAllowedTime - Date.now()) / 1000));
-    const minutes = Math.floor(remaining / 60);
-    const seconds = remaining % 60;
-    document.getElementById('cover-cooldown-timer').textContent = `${minutes}m ${seconds}s`;
-    if (remaining <= 0) {
-      document.getElementById('cover-cooldown-message').classList.add('hidden');
-      document.getElementById('cover-input-section').classList.remove('hidden');
-      coverGenerationCount = 0;
-      localStorage.setItem('coverGenerationCount', coverGenerationCount);
-    } else {
-      setTimeout(updateCoverCooldownTimer, 1000);
-    }
-  }
-
-  document.getElementById('generate-cover-btn').addEventListener('click', () => {
-    if (coverGenerationCount >= 1) {
-      if (!coverNextAllowedTime) {
-        coverNextAllowedTime = Date.now() + 3600000;
-        localStorage.setItem('coverNextAllowedTime', coverNextAllowedTime);
+    function updateCoverCooldownTimer() {
+      const remaining = Math.max(0, Math.floor((coverNextAllowedTime - Date.now()) / 1000));
+      const minutes = Math.floor(remaining / 60);
+      const seconds = remaining % 60;
+      document.getElementById('cover-cooldown-timer').textContent = `${minutes}m ${seconds}s`;
+      if (remaining <= 0) {
+        document.getElementById('cover-cooldown-message').classList.add('hidden');
+        document.getElementById('cover-input-section').classList.remove('hidden');
+        coverGenerationCount = 0;
+        localStorage.setItem('coverGenerationCount', coverGenerationCount);
+      } else {
+        setTimeout(updateCoverCooldownTimer, 1000);
       }
-      document.getElementById('cover-input-section').classList.add('hidden');
-      document.getElementById('cover-cooldown-message').classList.remove('hidden');
-      updateCoverCooldownTimer();
-      return;
     }
 
-    const coverPrompt = document.getElementById('cover-prompt').value;
-    document.getElementById('cover-output-section').innerHTML = `<p>Generated album cover for: <em>${coverPrompt}</em></p>`;
+    document.getElementById('generate-cover-btn').addEventListener('click', () => {
+      if (coverGenerationCount >= 1) {
+        if (!coverNextAllowedTime) {
+          coverNextAllowedTime = Date.now() + 3600000;
+          localStorage.setItem('coverNextAllowedTime', coverNextAllowedTime);
+        }
+        document.getElementById('cover-input-section').classList.add('hidden');
+        document.getElementById('cover-cooldown-message').classList.remove('hidden');
+        updateCoverCooldownTimer();
+        return;
+      }
 
-    coverGenerationCount++;
-    localStorage.setItem('coverGenerationCount', coverGenerationCount);
-  });
-</script>
+      const coverPrompt = document.getElementById('cover-prompt').value;
+      document.getElementById('cover-output-section').innerHTML = `<p>Generated album cover for: <em>${coverPrompt}</em></p>`;
+
+      coverGenerationCount++;
+      localStorage.setItem('coverGenerationCount', coverGenerationCount);
+    });
+  </script>
+</body>
+</html>
 
