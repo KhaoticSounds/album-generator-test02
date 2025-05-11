@@ -16,7 +16,7 @@ function updateCoverCooldownTimer() {
   }
 }
 
-document.getElementById('generate-cover-btn').addEventListener('click', () => {
+document.getElementById('generate-cover-btn').addEventListener('click', async () => {
   if (coverGenerationCount >= 1) {
     if (!coverNextAllowedTime) {
       coverNextAllowedTime = Date.now() + 3600000;
@@ -28,10 +28,55 @@ document.getElementById('generate-cover-btn').addEventListener('click', () => {
     return;
   }
 
-  const coverPrompt = document.getElementById('cover-prompt').value;
-  document.getElementById('cover-output-section').innerHTML = `<p>Generated album cover for: <em>${coverPrompt}</em></p>`;
+  const prompt = document.getElementById('cover-prompt').value;
+  const showAdvisory = document.getElementById('advisory-toggle').checked;
+  const outputSection = document.getElementById('cover-output-section');
+  const saveBtn = document.getElementById('save-btn');
+
+  outputSection.innerHTML = '<p>Generating image...</p>';
+
+  // TO DO: Replace with actual OpenAI API call
+  // const response = await fetch('/api/generate-image', { method: 'POST', body: JSON.stringify({ prompt }) });
+  // const imageUrl = (await response.json()).url;
+  const imageUrl = 'https://via.placeholder.com/512x512.png?text=AI+Album+Cover'; // Placeholder image
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'output-wrapper';
+
+  const img = document.createElement('img');
+  img.src = imageUrl;
+  img.alt = 'Generated Cover';
+
+  wrapper.appendChild(img);
+
+  if (showAdvisory) {
+    const advisory = document.createElement('img');
+    advisory.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Parental_Advisory_label.svg/320px-Parental_Advisory_label.svg.png';
+    advisory.className = 'advisory-label';
+    wrapper.appendChild(advisory);
+  }
+
+  outputSection.innerHTML = '';
+  outputSection.appendChild(wrapper);
+  saveBtn.classList.remove('hidden');
 
   coverGenerationCount++;
   localStorage.setItem('coverGenerationCount', coverGenerationCount);
+});
+
+document.getElementById('save-btn').addEventListener('click', () => {
+  const canvas = document.createElement('canvas');
+  const img = document.querySelector('#cover-output-section img');
+  if (!img) return;
+
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = 'album_cover.png';
+  a.click();
 });
 
