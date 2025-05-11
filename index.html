@@ -1,22 +1,22 @@
-<!-- index.html -->
-<div id="generator-container" class="blue-border">
-  <h1>KhaoticSounds Generator</h1>
+<!-- test02: Album Cover Generator with Paywall -->
+<div id="cover-generator-container" class="blue-border">
+  <h1>KhaoticSounds Album Cover Generator</h1>
   <div id="cta-banner">
-    <p><strong>Drop your heat. Get noticed. Only 24 hours to shine.</strong></p>
+    <p><strong>Create the cover. Complete the vision. One free try every hour.</strong></p>
   </div>
-  <div id="input-section">
-    <textarea id="user-input" placeholder="Enter your prompt..."></textarea>
-    <button id="generate-btn">Generate</button>
+  <div id="cover-input-section">
+    <textarea id="cover-prompt" placeholder="Describe your album cover..."></textarea>
+    <button id="generate-cover-btn">Generate Cover</button>
   </div>
-  <div id="output-section"></div>
-  <div id="cooldown-message" class="hidden">
+  <div id="cover-output-section"></div>
+  <div id="cover-cooldown-message" class="hidden">
     <div class="flame-box">
       <h2>🔥 KhaoticSounds Premium</h2>
-      <p>You've hit your limit! You can generate again in <span id="cooldown-timer"></span>.</p>
+      <p>You've hit your limit! You can generate again in <span id="cover-cooldown-timer"></span>.</p>
       <p>Upgrade now to unlock:</p>
       <ul>
-        <li>🎤 Unlimited Lyric Generations</li>
         <li>🎨 Unlimited Album Cover Generations</li>
+        <li>🎤 Unlimited Lyric Generations</li>
         <li>🔥 Exclusive Beat Drops Monthly</li>
       </ul>
       <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="pay-btn">Unlock Premium</a>
@@ -40,13 +40,13 @@
     max-width: 600px;
     margin: auto;
   }
-  #user-input {
+  #cover-prompt {
     width: 90%;
     height: 100px;
     margin-bottom: 10px;
     font-size: 16px;
   }
-  #generate-btn, .pay-btn {
+  #generate-cover-btn, .pay-btn {
     padding: 10px 20px;
     background-color: #00f0ff;
     color: #000;
@@ -84,40 +84,41 @@
 </style>
 
 <script>
-  let generationCount = localStorage.getItem('generationCount') || 0;
-  let nextAllowedTime = localStorage.getItem('nextAllowedTime');
+  let coverGenerationCount = localStorage.getItem('coverGenerationCount') || 0;
+  let coverNextAllowedTime = localStorage.getItem('coverNextAllowedTime');
 
-  function updateCooldownTimer() {
-    const remaining = Math.max(0, Math.floor((nextAllowedTime - Date.now()) / 1000));
+  function updateCoverCooldownTimer() {
+    const remaining = Math.max(0, Math.floor((coverNextAllowedTime - Date.now()) / 1000));
     const minutes = Math.floor(remaining / 60);
     const seconds = remaining % 60;
-    document.getElementById('cooldown-timer').textContent = `${minutes}m ${seconds}s`;
+    document.getElementById('cover-cooldown-timer').textContent = `${minutes}m ${seconds}s`;
     if (remaining <= 0) {
-      document.getElementById('cooldown-message').classList.add('hidden');
-      document.getElementById('input-section').classList.remove('hidden');
-      generationCount = 0;
-      localStorage.setItem('generationCount', generationCount);
+      document.getElementById('cover-cooldown-message').classList.add('hidden');
+      document.getElementById('cover-input-section').classList.remove('hidden');
+      coverGenerationCount = 0;
+      localStorage.setItem('coverGenerationCount', coverGenerationCount);
     } else {
-      setTimeout(updateCooldownTimer, 1000);
+      setTimeout(updateCoverCooldownTimer, 1000);
     }
   }
 
-  document.getElementById('generate-btn').addEventListener('click', () => {
-    if (generationCount >= 1) {
-      if (!nextAllowedTime) {
-        nextAllowedTime = Date.now() + 3600000;
-        localStorage.setItem('nextAllowedTime', nextAllowedTime);
+  document.getElementById('generate-cover-btn').addEventListener('click', () => {
+    if (coverGenerationCount >= 1) {
+      if (!coverNextAllowedTime) {
+        coverNextAllowedTime = Date.now() + 3600000;
+        localStorage.setItem('coverNextAllowedTime', coverNextAllowedTime);
       }
-      document.getElementById('input-section').classList.add('hidden');
-      document.getElementById('cooldown-message').classList.remove('hidden');
-      updateCooldownTimer();
+      document.getElementById('cover-input-section').classList.add('hidden');
+      document.getElementById('cover-cooldown-message').classList.remove('hidden');
+      updateCoverCooldownTimer();
       return;
     }
 
-    const userInput = document.getElementById('user-input').value;
-    document.getElementById('output-section').innerHTML = `<p>Generated output for: <em>${userInput}</em></p>`;
+    const coverPrompt = document.getElementById('cover-prompt').value;
+    document.getElementById('cover-output-section').innerHTML = `<p>Generated album cover for: <em>${coverPrompt}</em></p>`;
 
-    generationCount++;
-    localStorage.setItem('generationCount', generationCount);
+    coverGenerationCount++;
+    localStorage.setItem('coverGenerationCount', coverGenerationCount);
   });
 </script>
+
