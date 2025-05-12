@@ -1,137 +1,66 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  color: #fff;
-  font-family: 'Segoe UI', sans-serif;
-}
+let freeUsed = false;
+const generateBtn = document.getElementById('generate-btn');
+const spinner = document.getElementById('spinner');
+const outputBox = document.getElementById('image-output');
+const promptInput = document.getElementById('prompt');
+const saveBtn = document.getElementById('save-btn');
+const premiumPopup = document.getElementById('premium-popup');
+const toggleAdvisory = document.getElementById('toggle-advisory');
+const advisoryImg = document.getElementById('advisory-img');
 
-.generator-container {
-  max-width: 540px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
-  border: 2px solid #007bff;
-  border-radius: 10px;
-}
+let advisoryOn = false;
 
-.output-wrapper {
-  width: 100%;
-  height: 500px;
-  border: 2px dashed #444;
-  background: #111;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
+toggleAdvisory.onclick = () => {
+  advisoryOn = !advisoryOn;
+  toggleAdvisory.textContent = `Advisory: ${advisoryOn ? "On" : "Off"}`;
+  advisoryImg.style.display = advisoryOn ? "block" : "none";
+};
 
-#image-output img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.placeholder-text {
-  color: #555;
-  font-size: 16px;
-  text-align: center;
-  padding: 20px;
-}
-
-.controls-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
-
-button {
-  padding: 10px 15px;
-  font-weight: bold;
-  background: #fff;
-  color: #000;
-  border: 2px solid #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-button:hover {
-  background: #007bff;
-  color: #fff;
-}
-
-#prompt {
-  margin-top: 10px;
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #555;
-  box-sizing: border-box;
-  color: #000;
-}
-
-#save-btn {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.spinner {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  border: 4px solid #007bff;
-  border-top: 4px solid transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+generateBtn.onclick = async () => {
+  if (freeUsed) {
+    premiumPopup.style.display = "flex";
+    return;
   }
-}
 
-#advisory-img {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  width: 100px;
-  opacity: 0.85;
-}
+  const prompt = promptInput.value.trim();
+  if (!prompt) return;
 
-#premium-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
+  spinner.style.display = "block";
+  outputBox.innerHTML = "";
+  outputBox.appendChild(spinner);
+  if (advisoryOn) outputBox.appendChild(advisoryImg);
 
-.popup-content {
-  background: #111;
-  border: 2px solid #007bff;
-  padding: 25px;
-  text-align: center;
-  border-radius: 8px;
-}
+  try {
+    const response = await fetch("/api/cover", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
 
-.popup-content a {
-  color: #fff;
-  font-weight: bold;
-  display: inline-block;
-  margin-top: 10px;
-  background: #007bff;
-  padding: 8px 14px;
-  text-decoration: none;
-  border-radius: 5px;
-}
+    const data = await response.json();
+    const img = new Image();
+    img.src = data.imageUrl;
+    img.onload = () => {
+      spinner.style.display = "none";
+      outputBox.innerHTML = "";
+      outputBox.appendChild(img);
+      if (advisoryOn) outputBox.appendChild(advisoryImg);
+      saveBtn.style.display = "block";
+    };
 
+    freeUsed = true;
+  } catch (err) {
+    spinner.style.display = "none";
+    outputBox.innerHTML = `<span class="placeholder-text">Error generating image.</span>`;
+  }
+};
+
+saveBtn.onclick = () => {
+  const img = outputBox.querySelector("img");
+  if (!img) return;
+
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = "album-cover.png";
+  link.click();
+};
