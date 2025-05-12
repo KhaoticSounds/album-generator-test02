@@ -1,91 +1,97 @@
-body {
-  background-color: #111;
-  color: #fff;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding: 20px;
+let coverGenerationCount = localStorage.getItem('coverGenerationCount') || 0;
+let coverNextAllowedTime = localStorage.getItem('coverNextAllowedTime');
+
+function updateCoverCooldownTimer() {
+  const remaining = Math.max(0, Math.floor((coverNextAllowedTime - Date.now()) / 1000));
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining % 60;
+  document.getElementById('cover-cooldown-timer').textContent = `${minutes}m ${seconds}s`;
+  if (remaining <= 0) {
+    document.getElementById('cover-cooldown-message').classList.add('hidden');
+    document.getElementById('cover-input-section').classList.remove('hidden');
+    coverGenerationCount = 0;
+    localStorage.setItem('coverGenerationCount', coverGenerationCount);
+  } else {
+    setTimeout(updateCoverCooldownTimer, 1000);
+  }
 }
 
-.blue-border {
-  border: 2px solid #00f0ff;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #1a1a1a;
-  max-width: 600px;
-  margin: auto;
-}
+document.getElementById('generate-cover-btn').addEventListener('click', async () => {
+  if (coverGenerationCount >= 1) {
+    if (!coverNextAllowedTime) {
+      coverNextAllowedTime = Date.now() + 3600000;
+      localStorage.setItem('coverNextAllowedTime', coverNextAllowedTime);
+    }
+    document.getElementById('cover-input-section').classList.add('hidden');
+    document.getElementById('cover-cooldown-message').classList.remove('hidden');
+    updateCoverCooldownTimer();
+    return;
+  }
 
-#cover-prompt,
-#cover-upload {
-  width: 90%;
-  margin-bottom: 10px;
-  font-size: 16px;
-}
+  const prompt = document.getElementById('cover-prompt').value;
+  const showAdvisory = document.getElementById('advisory-toggle').checked;
+  const outputSection = document.getElementById('cover-output-section');
+  const saveBtn = document.getElementById('save-btn');
 
-#cover-prompt {
-  height: 100px;
-}
+  outputSection.innerHTML = '<p>Generating image...</p>';
 
-#generate-cover-btn,
-.pay-btn,
-#save-btn {
-  padding: 10px 20px;
-  background-color: #00f0ff;
-  color: #000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  margin: 5px;
-}
+  try {
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer YOUR_OPENAI_API_KEY_HERE`
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        n: 1,
+        size: '512x512'
+      })
+    });
 
-.hidden {
-  display: none;
-}
+    const data = await response.json();
+    const imageUrl = data.data[0].url;
 
-.flame-box {
-  border: 2px solid #00f0ff;
-  padding: 20px;
-  margin-top: 20px;
-  background: radial-gradient(circle, rgba(0, 0, 50, 1) 0%, rgba(0, 0, 0, 1) 100%);
-  box-shadow: 0 0 20px #00f0ff;
-}
+    const wrapper = document.createElement('div');
+    wrapper.className = 'output-wrapper';
 
-.flame-box h2 {
-  color: #00f0ff;
-}
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Generated Cover';
 
-.pay-btn {
-  margin-top: 15px;
-  display: inline-block;
-}
+    wrapper.appendChild(img);
 
-#cta-banner {
-  background-color: #001f33;
-  padding: 10px;
-  margin-bottom: 15px;
-  color: #00f0ff;
-  border-radius: 5px;
-  font-weight: bold;
-  box-shadow: 0 0 10px #00f0ff;
-}
+    if (showAdvisory) {
+      const advisory = document.createElement('img');
+      advisory.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Parental_Advisory_label.svg/320px-Parental_Advisory_label.svg.png';
+      advisory.className = 'advisory-label';
+      wrapper.appendChild(advisory);
+    }
 
-#cover-output-section img {
-  max-width: 100%;
-  position: relative;
-  border-radius: 8px;
-}
+    outputSection.innerHTML = '';
+    outputSection.appendChild(wrapper);
+    saveBtn.classList.remove('hidden');
 
-.output-wrapper {
-  position: relative;
-  display: inline-block;
-  margin-top: 10px;
-}
+    coverGenerationCount++;
+    localStorage.setItem('coverGenerationCount', coverGenerationCount);
+  } catch (error) {
+    outputSection.innerHTML = '<p>Error generating image. Check your API key or connection.</p>';
+  }
+});
 
-.advisory-label {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 80px;
-  opacity: 0.9;
-}
+document.getElementById('save-btn').addEventListener('click', () => {
+  const canvas = document.createElement('canvas');
+  const img = document.querySelector('#cover-output-section img');
+  if (!img) return;
+
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = 'album_cover.png';
+  a.click();
+});
+
