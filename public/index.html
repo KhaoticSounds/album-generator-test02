@@ -3,33 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KhaoticSounds Album Generator</title>
+  <title>Test00 Lyrics Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="generator-container">
-    <!-- Output box where image appears -->
-    <div id="image-output" class="output-box">
-      <span class="placeholder-text">Your album cover will appear here.</span>
+    <div id="output-box">
+      <div id="loading-spinner"></div>
+      <pre id="lyrics-output"></pre>
     </div>
 
-    <!-- Spinner (hidden by default) -->
-    <div id="spinner" class="spinner" style="display: none;"></div>
+    <div id="bpm-label">BPM: 120</div>
+    <input type="range" id="bpm-slider" min="70" max="200" value="120" />
+    <div class="tick-marks"></div>
 
-    <!-- Prompt input and generate button -->
-    <div class="controls">
-      <input
-        type="text"
-        id="prompt"
-        placeholder="Describe your album cover idea..."
-      />
-      <button id="generate-btn">Generate</button>
+    <div id="prompt-form">
+      <input type="text" id="prompt" placeholder="Type your theme or idea..." />
+      <div class="dropdowns">
+        <select id="mood">
+          <option>None</option>
+          <option>Hype</option>
+          <option>Chill</option>
+          <option>Gritty</option>
+          <option>Emotional</option>
+          <option>Dark</option>
+          <option>Uplifting</option>
+        </select>
+        <select id="bars">
+          <option>None</option>
+          <option>8</option>
+          <option>8 bar hook</option>
+          <option>12</option>
+          <option>16</option>
+        </select>
+      </div>
+      <button id="generate">Generate Lyrics</button>
     </div>
 
-    <!-- Save button (hidden by default) -->
-    <button id="save-btn" style="display: none;">Save</button>
+    <button id="copy-btn" style="display: none;">Copy Lyrics</button>
+
+    <div id="subscription-popup" style="display: none;">
+      <div class="popup-content">
+        <h3>🔥 Upgrade for Unlimited Lyrics</h3>
+        <p>You’ve reached your free limit. Subscribe for $5.99/month to unlock unlimited lyrics!</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
+      </div>
+    </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
