@@ -1,95 +1,184 @@
-body {
+/* style.css */
+
+body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-}
-
-.generator-container {
-  border: 2px solid #007bff;
-  padding: 20px;
-  margin-top: 40px;
+  height: 100%;
   width: 100%;
-  max-width: 600px;
-  background-color: #111;
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-
-.output-box {
-  width: 500px;
-  height: 500px;
-  background-color: #111;
-  border: 1px dashed #555;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  margin-bottom: 15px;
-  box-sizing: border-box;
 }
 
-.output-box img {
+.generator-container {
+  border: 3px solid #007BFF;
+  padding: 16px;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-text {
-  color: #666;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.controls {
+  max-width: 600px;
+  height: 650px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: white;
 }
 
-#prompt {
-  padding: 10px;
-  font-size: 1rem;
+#output-box {
   width: 100%;
-  box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid #007bff;
+  height: 200px;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 8px;
+  position: relative;
 }
 
-button {
+#lyrics-output {
+  margin: 0;
   padding: 10px;
-  font-size: 1rem;
-  font-weight: bold;
-  background-color: #fff;
-  color: #000;
-  border: 2px solid #007bff;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s ease;
+  white-space: pre-wrap;
+  width: 100%;
 }
 
-button:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.spinner {
-  width: 30px;
-  height: 30px;
-  border: 4px solid #007bff;
-  border-top: 4px solid transparent;
+#loading-spinner {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #007BFF;
+  border-top: 2px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 10px auto;
+  display: none;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
+  to { transform: rotate(360deg); }
+}
+
+#bpm-label {
+  margin: 4px 0;
+  font-weight: bold;
+}
+
+#bpm-slider {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.tick-marks {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  padding: 0 2px;
+  box-sizing: border-box;
+}
+
+.tick-marks::before {
+  content: '70';
+}
+
+.tick-marks::after {
+  content: '200';
+}
+
+#prompt-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+#prompt {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dropdowns {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+select {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+#copy-btn {
+  margin-top: 10px;
+}
+
+#subscription-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background: white;
+  border: 3px solid #007BFF;
+  padding: 24px;
+  text-align: center;
+  max-width: 320px;
+  border-radius: 8px;
+}
+
+.popup-content h3 {
+  color: #007BFF;
+}
+
+.popup-content a {
+  display: inline-block;
+  margin-top: 12px;
+  background: #007BFF;
+  color: white;
+  padding: 10px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .generator-container {
+    height: auto;
+  }
+  #output-box {
+    height: 150px;
   }
 }
+
