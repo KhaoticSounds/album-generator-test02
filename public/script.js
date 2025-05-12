@@ -59,7 +59,7 @@ generateBtn.onclick = async () => {
       saveBtn.style.display = "block";
     };
 
-    nextAllowedTime = Date.now() + 30 * 60 * 1000;
+    nextAllowedTime = Date.now() + 30 * 60 * 1000; // 30 mins
 
   } catch (err) {
     spinner.style.display = "none";
