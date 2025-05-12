@@ -100,7 +100,7 @@ button:hover {
   bottom: 10px;
   left: 10px;
   width: 100px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 #premium-popup {
@@ -134,3 +134,4 @@ button:hover {
   text-decoration: none;
   border-radius: 5px;
 }
+
