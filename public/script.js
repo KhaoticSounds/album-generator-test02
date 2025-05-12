@@ -6,9 +6,12 @@ const saveBtn = document.getElementById("save-btn");
 
 generateBtn.onclick = async () => {
   const prompt = promptInput.value.trim();
-  if (!prompt) return alert("Please enter a prompt");
+  if (!prompt) {
+    alert("Please enter a prompt.");
+    return;
+  }
 
-  // Start loading
+  // Show spinner and clear previous content
   spinner.style.display = "block";
   imageOutput.innerHTML = "";
   imageOutput.appendChild(spinner);
@@ -22,7 +25,7 @@ generateBtn.onclick = async () => {
     });
 
     const data = await response.json();
-    if (!data.imageUrl) throw new Error("No image returned");
+    if (!data.imageUrl) throw new Error("No image URL returned from OpenAI");
 
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -31,17 +34,23 @@ generateBtn.onclick = async () => {
     img.onload = () => {
       spinner.style.display = "none";
       imageOutput.innerHTML = "";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
       imageOutput.appendChild(img);
       saveBtn.style.display = "block";
     };
 
     img.onerror = () => {
-      throw new Error("Image failed to load");
+      spinner.style.display = "none";
+      imageOutput.innerHTML =
+        "<span class='placeholder-text'>⚠️ Failed to load the image.</span>";
     };
   } catch (err) {
-    spinner.style.display = "none";
     console.error("❌ Generation error:", err);
-    imageOutput.innerHTML = `<span class="placeholder-text">Failed to generate image.</span>`;
+    spinner.style.display = "none";
+    imageOutput.innerHTML =
+      "<span class='placeholder-text'>⚠️ Something went wrong. Try again later.</span>";
   }
 };
 
@@ -67,6 +76,7 @@ saveBtn.onclick = () => {
   };
 
   tempImg.onerror = () => {
-    alert("Download failed.");
+    alert("Download failed. Try again.");
   };
 };
+
