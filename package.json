@@ -1,5 +1,6 @@
 {
-  "name": "test02-album-generator",
+  "name": "album-cover-generator",
+  "version": "1.0.0",
   "type": "module",
   "main": "server.js",
   "scripts": {
