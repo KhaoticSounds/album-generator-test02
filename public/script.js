@@ -12,20 +12,22 @@ function generateCover() {
   spinner.classList.remove("hidden");
   img.src = "";
 
-  // Simulated API call (replace with real OpenAI image generation)
+  // POST request to AI backend (make sure this route matches your server)
   fetch("/api/generate-cover", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt })
   })
     .then(res => res.json())
     .then(data => {
-      img.src = data.imageUrl; // image URL returned by your backend
+      if (data.imageUrl) {
+        img.src = data.imageUrl;
+      } else {
+        img.alt = "No image returned.";
+      }
     })
     .catch(() => {
-      alert("Something went wrong.");
+      alert("Something went wrong. Try again.");
     })
     .finally(() => {
       spinner.classList.add("hidden");
