@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Album Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KhaoticSounds Album Generator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="generator-container">
-    <div class="output-wrapper">
-      <div id="image-output">
-        <span class="placeholder-text">Your album cover will appear here.</span>
-        <div class="spinner" id="spinner" style="display: none;"></div>
-      </div>
+    <div id="image-output" class="output-box">
+      <span class="placeholder-text">Your album cover will appear here.</span>
     </div>
 
-    <input type="text" id="prompt" placeholder="Describe your album cover idea...">
-
-    <div class="controls-row">
+    <div class="controls">
+      <input
+        type="text"
+        id="prompt"
+        placeholder="Describe your album cover idea..."
+      />
       <button id="generate-btn">Generate</button>
     </div>
 
-    <button id="save-btn" style="display:none;">Save</button>
+    <button id="save-btn" style="display: none">Save</button>
 
-    <div id="premium-popup" class="premium-popup" style="display: none;">
-      <div class="premium-box">
-        <div class="glow-header">💎 Unlock Unlimited Covers</div>
-        <p class="premium-desc">You’ve used your free try.<br>Come back in 30 minutes or unlock full access:</p>
-        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" class="paypal-btn" target="_blank">💰 Pay with PayPal</a>
-      </div>
-    </div>
+    <div id="spinner" class="spinner" style="display: none;"></div>
   </div>
 
   <script src="script.js"></script>
