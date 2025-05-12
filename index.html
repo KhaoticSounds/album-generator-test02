@@ -1,84 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Album Cover Generator</title>
-  <style>
-    body {
-      background-color: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    .blue-border {
-      border: 2px solid #00f0ff;
-      padding: 20px;
-      border-radius: 10px;
-      background-color: #1a1a1a;
-      max-width: 600px;
-      margin: auto;
-    }
-    #cover-prompt, #cover-upload {
-      width: 90%;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-    #cover-prompt {
-      height: 100px;
-    }
-    #generate-cover-btn, .pay-btn, #save-btn {
-      padding: 10px 20px;
-      background-color: #00f0ff;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      margin: 5px;
-    }
-    .hidden {
-      display: none;
-    }
-    .flame-box {
-      border: 2px solid #00f0ff;
-      padding: 20px;
-      margin-top: 20px;
-      background: radial-gradient(circle, rgba(0, 0, 50, 1) 0%, rgba(0, 0, 0, 1) 100%);
-      box-shadow: 0 0 20px #00f0ff;
-    }
-    .flame-box h2 {
-      color: #00f0ff;
-    }
-    .pay-btn {
-      margin-top: 15px;
-      display: inline-block;
-    }
-    #cta-banner {
-      background-color: #001f33;
-      padding: 10px;
-      margin-bottom: 15px;
-      color: #00f0ff;
-      border-radius: 5px;
-      font-weight: bold;
-      box-shadow: 0 0 10px #00f0ff;
-    }
-    #cover-output-section img {
-      max-width: 100%;
-      position: relative;
-    }
-    .advisory-label {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 80px;
-    }
-    .output-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="cover-generator-container" class="blue-border">
@@ -87,8 +13,8 @@
     </div>
     <div id="cover-input-section">
       <textarea id="cover-prompt" placeholder="Describe your album cover..."></textarea><br>
-      <input type="file" id="cover-upload" accept="image/*" /><br>
-      <label><input type="checkbox" id="advisory-toggle" /> Add Parental Advisory</label><br>
+      <input type="file" id="cover-upload" accept="image/*"><br>
+      <label><input type="checkbox" id="advisory-toggle"> Add Parental Advisory</label><br>
       <button id="generate-cover-btn">Generate Cover</button>
     </div>
     <div id="cover-output-section"></div>
@@ -145,33 +71,48 @@
 
       outputSection.innerHTML = '<p>Generating image...</p>';
 
-      // Replace this with actual OpenAI API request
-      // const response = await fetch('YOUR_BACKEND_ENDPOINT', { method: 'POST', body: JSON.stringify({ prompt }) })
-      // const imageUrl = (await response.json()).url;
-      const imageUrl = 'https://via.placeholder.com/512x512.png?text=AI+Album+Cover'; // Placeholder image
+      try {
+        const response = await fetch('https://api.openai.com/v1/images/generations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer YOUR_OPENAI_API_KEY_HERE`
+          },
+          body: JSON.stringify({
+            prompt: prompt,
+            n: 1,
+            size: '512x512'
+          })
+        });
 
-      const wrapper = document.createElement('div');
-      wrapper.className = 'output-wrapper';
+        const data = await response.json();
+        const imageUrl = data.data[0].url;
 
-      const img = document.createElement('img');
-      img.src = imageUrl;
-      img.alt = 'Generated Cover';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'output-wrapper';
 
-      wrapper.appendChild(img);
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = 'Generated Cover';
 
-      if (showAdvisory) {
-        const advisory = document.createElement('img');
-        advisory.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Parental_Advisory_label.svg/320px-Parental_Advisory_label.svg.png';
-        advisory.className = 'advisory-label';
-        wrapper.appendChild(advisory);
+        wrapper.appendChild(img);
+
+        if (showAdvisory) {
+          const advisory = document.createElement('img');
+          advisory.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Parental_Advisory_label.svg/320px-Parental_Advisory_label.svg.png';
+          advisory.className = 'advisory-label';
+          wrapper.appendChild(advisory);
+        }
+
+        outputSection.innerHTML = '';
+        outputSection.appendChild(wrapper);
+        saveBtn.classList.remove('hidden');
+
+        coverGenerationCount++;
+        localStorage.setItem('coverGenerationCount', coverGenerationCount);
+      } catch (error) {
+        outputSection.innerHTML = '<p>Error generating image. Check your API key or connection.</p>';
       }
-
-      outputSection.innerHTML = '';
-      outputSection.appendChild(wrapper);
-      saveBtn.classList.remove('hidden');
-
-      coverGenerationCount++;
-      localStorage.setItem('coverGenerationCount', coverGenerationCount);
     });
 
     document.getElementById('save-btn').addEventListener('click', () => {
@@ -192,4 +133,3 @@
   </script>
 </body>
 </html>
-
