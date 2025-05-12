@@ -1,82 +1,78 @@
-const generateBtn = document.getElementById("generate-btn");
-const promptInput = document.getElementById("prompt");
-const imageOutput = document.getElementById("image-output");
-const spinner = document.getElementById("spinner");
-const saveBtn = document.getElementById("save-btn");
+// script.js
 
-generateBtn.onclick = async () => {
-  const prompt = promptInput.value.trim();
-  if (!prompt) {
-    alert("Please enter a prompt.");
+let freeUsage = true;
+let bpmSlider = document.getElementById("bpm-slider");
+let bpmLabel = document.getElementById("bpm-label");
+let promptInput = document.getElementById("prompt");
+let moodSelect = document.getElementById("mood");
+let barsSelect = document.getElementById("bars");
+let generateBtn = document.getElementById("generate");
+let lyricsOutput = document.getElementById("lyrics-output");
+let copyBtn = document.getElementById("copy-btn");
+let popup = document.getElementById("subscription-popup");
+let spinner = document.getElementById("loading-spinner");
+
+// Update BPM label in real time
+bpmSlider.addEventListener("input", () => {
+  bpmLabel.textContent = `BPM: ${bpmSlider.value}`;
+});
+
+// Handle Generate Lyrics button
+generateBtn.addEventListener("click", async () => {
+  if (!freeUsage) {
+    popup.style.display = "flex";
     return;
   }
 
-  // Show spinner and clear previous content
+  const prompt = promptInput.value.trim();
+  const mood = moodSelect.value;
+  const bars = barsSelect.value;
+  const bpm = bpmSlider.value;
+
+  if (!prompt) return;
+
   spinner.style.display = "block";
-  imageOutput.innerHTML = "";
-  imageOutput.appendChild(spinner);
-  saveBtn.style.display = "none";
+  generateBtn.disabled = true;
+  lyricsOutput.textContent = "";
 
   try {
-    const response = await fetch("/api/cover", {
+    const fullPrompt = `Generate ${bars} bars of ${mood} rap lyrics at ${bpm} BPM about: ${prompt}`;
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer YOUR_OPENAI_API_KEY"
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [{ role: "user", content: fullPrompt }],
+        max_tokens: 150
+      })
     });
 
     const data = await response.json();
-    if (!data.imageUrl) throw new Error("No image URL returned from OpenAI");
+    const result = data.choices[0].message.content;
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = data.imageUrl;
+    lyricsOutput.textContent = result;
+    copyBtn.style.display = "block";
+    promptInput.style.display = "none";
+    freeUsage = false;
 
-    img.onload = () => {
-      spinner.style.display = "none";
-      imageOutput.innerHTML = "";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "cover";
-      imageOutput.appendChild(img);
-      saveBtn.style.display = "block";
-    };
+    setTimeout(() => {
+      freeUsage = true;
+    }, 3600000); // 1 hour
 
-    img.onerror = () => {
-      spinner.style.display = "none";
-      imageOutput.innerHTML =
-        "<span class='placeholder-text'>⚠️ Failed to load the image.</span>";
-    };
-  } catch (err) {
-    console.error("❌ Generation error:", err);
+  } catch (error) {
+    lyricsOutput.textContent = "Error generating lyrics. Try again later.";
+  } finally {
     spinner.style.display = "none";
-    imageOutput.innerHTML =
-      "<span class='placeholder-text'>⚠️ Something went wrong. Try again later.</span>";
+    generateBtn.disabled = false;
   }
-};
+});
 
-saveBtn.onclick = () => {
-  const img = imageOutput.querySelector("img");
-  if (!img) return;
-
-  const canvas = document.createElement("canvas");
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
-  const ctx = canvas.getContext("2d");
-
-  const tempImg = new Image();
-  tempImg.crossOrigin = "anonymous";
-  tempImg.src = img.src;
-
-  tempImg.onload = () => {
-    ctx.drawImage(tempImg, 0, 0);
-    const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/png");
-    link.download = "album-cover.png";
-    link.click();
-  };
-
-  tempImg.onerror = () => {
-    alert("Download failed. Try again.");
-  };
-};
+// Handle Copy button
+copyBtn.addEventListener("click", () => {
+  navigator.clipboard.writeText(lyricsOutput.textContent);
+});
 
