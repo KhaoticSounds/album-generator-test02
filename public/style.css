@@ -47,29 +47,23 @@ body {
 
 .controls-row {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: center;
   margin-top: 15px;
-  flex-wrap: wrap;
 }
 
-.controls-row button,
-#reference-img {
-  flex: 1;
-  padding: 10px;
+.controls-row button {
+  padding: 10px 20px;
   font-weight: bold;
   background: #fff;
   color: #000;
   border: 2px solid #007bff;
   border-radius: 5px;
   cursor: pointer;
-  text-align: center;
 }
 
-#reference-img {
-  background: #fff;
-  color: #000;
-  font-size: 0.95rem;
+.controls-row button:hover {
+  background: #007bff;
+  color: #fff;
 }
 
 #prompt {
@@ -112,16 +106,7 @@ body {
   }
 }
 
-#advisory-img {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 100px;
-  opacity: 0.85;
-  display: none;
-}
-
-/* 🔥 Premium Pop-Up */
+/* Premium popup */
 .premium-popup {
   position: fixed;
   top: 0;
