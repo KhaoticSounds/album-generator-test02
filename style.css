@@ -73,11 +73,13 @@ body {
 #cover-output-section img {
   max-width: 100%;
   position: relative;
+  border-radius: 8px;
 }
 
 .output-wrapper {
   position: relative;
   display: inline-block;
+  margin-top: 10px;
 }
 
 .advisory-label {
@@ -85,5 +87,6 @@ body {
   bottom: 10px;
   right: 10px;
   width: 80px;
+  opacity: 0.9;
 }
 
