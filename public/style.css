@@ -6,7 +6,7 @@ body, html {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,7 +23,7 @@ body, html {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: white;
+  background-color: black;
 }
 
 #output-box {
@@ -42,10 +42,14 @@ body, html {
 }
 
 #lyrics-output {
-  margin: 0;
+  margin: auto;
   padding: 10px;
   white-space: pre-wrap;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 #loading-spinner {
@@ -68,6 +72,7 @@ body, html {
 #bpm-label {
   margin: 4px 0;
   font-weight: bold;
+  color: white;
 }
 
 #bpm-slider {
@@ -82,14 +87,14 @@ body, html {
   font-size: 10px;
   padding: 0 2px;
   box-sizing: border-box;
+  color: white;
 }
 
-.tick-marks::before {
-  content: '70';
-}
-
-.tick-marks::after {
-  content: '200';
+.tick-marks span {
+  display: inline-block;
+  width: 1px;
+  height: 6px;
+  background-color: white;
 }
 
 #prompt-form {
