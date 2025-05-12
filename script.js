@@ -13,22 +13,30 @@ document.getElementById("generate-btn").addEventListener("click", () => {
 
   outputBox.textContent = "Generating your cover...";
 
-  // Simulate image generation (replace this with real OpenAI call)
-  setTimeout(() => {
-    const img = document.createElement("img");
-    img.src = "https://via.placeholder.com/500x500.png?text=Your+Cover";
-    img.alt = "Generated Cover";
-    img.style.width = "100%";
-    img.style.height = "100%";
-    outputBox.innerHTML = "";
-    outputBox.appendChild(img);
+  fetch("/api/generate-image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const img = document.createElement("img");
+      img.src = data.image_url;
+      img.alt = "Generated Cover";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      outputBox.innerHTML = "";
+      outputBox.appendChild(img);
 
-    generationCount++;
+      generationCount++;
 
-    if (subscribed) {
-      document.getElementById("save-container").style.display = "block";
-    }
-  }, 1500);
+      if (subscribed) {
+        document.getElementById("save-container").style.display = "block";
+      }
+    })
+    .catch(() => {
+      outputBox.textContent = "Something went wrong.";
+    });
 });
 
 document.getElementById("advisor-toggle").addEventListener("click", () => {
@@ -45,5 +53,4 @@ document.getElementById("save-btn").addEventListener("click", () => {
     link.click();
   }
 });
-
 
