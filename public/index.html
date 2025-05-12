@@ -1,42 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cover Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Album Cover Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="generator-container">
-    
     <!-- Output Box -->
-    <div id="image-output" class="image-box">
-      <span class="placeholder">Your album cover will appear here.</span>
+    <div class="output-box">
+      <img id="cover-image" src="" alt="Your album cover will appear here.">
+      <div id="loading-spinner" class="spinner hidden"></div>
     </div>
 
-    <!-- Buttons -->
-    <div class="button-row">
-      <button id="advisor-toggle">Advisor: Off</button>
-      <button id="generate-btn">Generate</button>
+    <!-- Control Buttons -->
+    <div class="controls">
+      <button id="toggle-advisor">Advisor: Off</button>
+      <button onclick="generateCover()">Generate</button>
     </div>
 
     <!-- Prompt Input -->
     <div class="form-group">
-      <input type="text" id="prompt" placeholder="Describe your album cover..." />
-    </div>
-
-    <!-- Save Button (conditionally shown) -->
-    <div id="save-container">
-      <button id="save-btn">Save Cover</button>
-    </div>
-
-    <!-- Subscription Popup -->
-    <div id="subscription-overlay">
-      <div class="popup">
-        <h2>🔥 Unlock Unlimited Access</h2>
-        <p>One free generation per hour. Save unlimited covers when you subscribe!</p>
-        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="pay-btn">Subscribe Now</a>
-      </div>
+      <input type="text" id="prompt" placeholder="Describe your album cover idea...">
     </div>
   </div>
 
