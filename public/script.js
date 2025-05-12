@@ -44,7 +44,8 @@ generateBtn.onclick = async () => {
 
   } catch (err) {
     spinner.style.display = "none";
-    imageOutput.innerHTML = `<span class="placeholder-text">Something went wrong. Try again later.</span>`;
+    imageOutput.innerHTML = `<span class="placeholder-text">Error generating image. Try again later.</span>`;
+    console.error("Image generation failed:", err);
   }
 };
 
