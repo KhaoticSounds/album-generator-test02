@@ -5,21 +5,14 @@ const outputBox = document.getElementById('image-output');
 const promptInput = document.getElementById('prompt');
 const saveBtn = document.getElementById('save-btn');
 const premiumPopup = document.getElementById('premium-popup');
-const toggleAdvisor = document.getElementById('toggle-advisor');
 const toggleAdvisory = document.getElementById('toggle-advisory');
 const advisoryImg = document.getElementById('advisory-img');
 
-let advisorOn = false;
 let advisoryOn = false;
-
-toggleAdvisor.onclick = () => {
-  advisorOn = !advisorOn;
-  toggleAdvisor.textContent = `Advisor: ${advisorOn ? "On" : "Off"}`;
-};
 
 toggleAdvisory.onclick = () => {
   advisoryOn = !advisoryOn;
-  toggleAdvisory.textContent = `Parental Advisory: ${advisoryOn ? "On" : "Off"}`;
+  toggleAdvisory.textContent = `Advisory: ${advisoryOn ? "On" : "Off"}`;
   advisoryImg.style.display = advisoryOn ? "block" : "none";
 };
 
@@ -41,7 +34,7 @@ generateBtn.onclick = async () => {
     const response = await fetch("/api/cover", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, advisor: advisorOn })
+      body: JSON.stringify({ prompt })
     });
 
     const data = await response.json();
@@ -71,3 +64,4 @@ saveBtn.onclick = () => {
   link.download = "album-cover.png";
   link.click();
 };
+
