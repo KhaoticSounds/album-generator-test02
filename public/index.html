@@ -8,10 +8,15 @@
 </head>
 <body>
   <div class="generator-container">
+    <!-- Output box where image appears -->
     <div id="image-output" class="output-box">
       <span class="placeholder-text">Your album cover will appear here.</span>
     </div>
 
+    <!-- Spinner (hidden by default) -->
+    <div id="spinner" class="spinner" style="display: none;"></div>
+
+    <!-- Prompt input and generate button -->
     <div class="controls">
       <input
         type="text"
@@ -21,9 +26,8 @@
       <button id="generate-btn">Generate</button>
     </div>
 
-    <button id="save-btn" style="display: none">Save</button>
-
-    <div id="spinner" class="spinner" style="display: none;"></div>
+    <!-- Save button (hidden by default) -->
+    <button id="save-btn" style="display: none;">Save</button>
   </div>
 
   <script src="script.js"></script>
