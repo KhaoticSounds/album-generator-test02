@@ -68,7 +68,7 @@ html, body {
 }
 
 #prompt {
-  width: 90%;
+  width: 50%;
   padding: 10px;
   font-size: 3rem;
   border-radius: 5px;
