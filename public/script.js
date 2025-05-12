@@ -30,6 +30,7 @@ generateBtn.onclick = async () => {
 
     const data = await response.json();
     const img = new Image();
+    img.crossOrigin = "anonymous";
     img.src = data.imageUrl;
 
     img.onload = () => {
@@ -51,10 +52,25 @@ saveBtn.onclick = () => {
   const img = imageOutput.querySelector("img");
   if (!img) return;
 
-  const link = document.createElement("a");
-  link.href = img.src;
-  link.download = "album-cover.png";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+
+  const tempImg = new Image();
+  tempImg.crossOrigin = "anonymous";
+  tempImg.src = img.src;
+
+  tempImg.onload = () => {
+    ctx.drawImage(tempImg, 0, 0);
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = "album-cover.png";
+    link.click();
+  };
+
+  tempImg.onerror = () => {
+    alert("Download failed — try again or reload the page.");
+  };
 };
