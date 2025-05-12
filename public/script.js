@@ -1,12 +1,13 @@
 let freeUsed = false;
+
 const generateBtn = document.getElementById('generate-btn');
-const spinner = document.getElementById('spinner');
-const outputBox = document.getElementById('image-output');
-const promptInput = document.getElementById('prompt');
-const saveBtn = document.getElementById('save-btn');
-const premiumPopup = document.getElementById('premium-popup');
 const toggleAdvisory = document.getElementById('toggle-advisory');
 const advisoryImg = document.getElementById('advisory-img');
+const promptInput = document.getElementById('prompt');
+const imageOutput = document.getElementById('image-output');
+const spinner = document.getElementById('spinner');
+const saveBtn = document.getElementById('save-btn');
+const premiumPopup = document.getElementById('premium-popup');
 
 let advisoryOn = false;
 
@@ -26,9 +27,9 @@ generateBtn.onclick = async () => {
   if (!prompt) return;
 
   spinner.style.display = "block";
-  outputBox.innerHTML = "";
-  outputBox.appendChild(spinner);
-  if (advisoryOn) outputBox.appendChild(advisoryImg);
+  imageOutput.innerHTML = "";
+  imageOutput.appendChild(spinner);
+  if (advisoryOn) imageOutput.appendChild(advisoryImg);
 
   try {
     const response = await fetch("/api/cover", {
@@ -42,21 +43,21 @@ generateBtn.onclick = async () => {
     img.src = data.imageUrl;
     img.onload = () => {
       spinner.style.display = "none";
-      outputBox.innerHTML = "";
-      outputBox.appendChild(img);
-      if (advisoryOn) outputBox.appendChild(advisoryImg);
+      imageOutput.innerHTML = "";
+      imageOutput.appendChild(img);
+      if (advisoryOn) imageOutput.appendChild(advisoryImg);
       saveBtn.style.display = "block";
     };
 
     freeUsed = true;
   } catch (err) {
     spinner.style.display = "none";
-    outputBox.innerHTML = `<span class="placeholder-text">Error generating image.</span>`;
+    imageOutput.innerHTML = `<span class="placeholder-text">Error generating image.</span>`;
   }
 };
 
 saveBtn.onclick = () => {
-  const img = outputBox.querySelector("img");
+  const img = imageOutput.querySelector("img");
   if (!img) return;
 
   const link = document.createElement("a");
