@@ -19,8 +19,7 @@ app.post("/api/cover", async (req, res) => {
   const { prompt } = req.body;
 
   if (!prompt || prompt.length < 3) {
-    console.warn("⚠️ Invalid prompt:", prompt);
-    return res.status(400).json({ error: "Prompt is too short or missing." });
+    return res.status(400).json({ error: "Prompt is too short." });
   }
 
   try {
@@ -32,16 +31,16 @@ app.post("/api/cover", async (req, res) => {
     });
 
     const imageUrl = response.data[0]?.url;
-    console.log("✅ Image URL generated:", imageUrl);
     res.json({ imageUrl });
   } catch (err) {
-    console.error("❌ OpenAI generation error:", err.message);
+    console.error("❌ OpenAI error:", err.message);
     res.status(500).json({ error: "Failed to generate image." });
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
+
 
