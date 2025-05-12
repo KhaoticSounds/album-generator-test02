@@ -13,7 +13,7 @@ document.getElementById("generate-btn").addEventListener("click", () => {
 
   outputBox.textContent = "Generating your cover...";
 
-  // Fake image generation (replace this with real OpenAI image code)
+  // Simulate image generation (replace this with real OpenAI call)
   setTimeout(() => {
     const img = document.createElement("img");
     img.src = "https://via.placeholder.com/500x500.png?text=Your+Cover";
