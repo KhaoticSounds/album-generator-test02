@@ -44,7 +44,7 @@ generateBtn.onclick = async () => {
 
   } catch (err) {
     spinner.style.display = "none";
-    imageOutput.innerHTML = `<span class="placeholder-text">Error generating image.</span>`;
+    imageOutput.innerHTML = `<span class="placeholder-text">Something went wrong. Try again later.</span>`;
   }
 };
 
@@ -71,6 +71,7 @@ saveBtn.onclick = () => {
   };
 
   tempImg.onerror = () => {
-    alert("Download failed — try again or reload the page.");
+    alert("Download failed — try again.");
   };
 };
+
