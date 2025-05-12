@@ -1,20 +1,27 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const { Configuration, OpenAIApi } = require('openai');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import { Configuration, OpenAIApi } from 'openai';
+
+dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
+// OpenAI Config
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-app.post("/api/generate-image", async (req, res) => {
+// Route for image generation
+app.post('/api/generate-image', async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
@@ -26,13 +33,13 @@ app.post("/api/generate-image", async (req, res) => {
 
     const imageUrl = response.data.data[0].url;
     res.json({ image_url: imageUrl });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Image generation failed." });
+  } catch (error) {
+    console.error("OpenAI Error:", error);
+    res.status(500).json({ error: 'Image generation failed.' });
   }
 });
 
-const port = process.env.PORT || 3000;
+// Start the server
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
 });
