@@ -1,43 +1,38 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import OpenAI from 'openai';
+import express from "express";
+import path from "path";
+import dotenv from "dotenv";
+import OpenAI from "openai";
 
 dotenv.config();
-
 const app = express();
-const port = process.env.PORT || 3000;
+const __dirname = path.resolve();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+app.post("/api/cover", async (req, res) => {
+  const { prompt } = req.body;
 
-app.post('/api/generate-image', async (req, res) => {
   try {
-    const prompt = req.body.prompt;
-
     const response = await openai.images.generate({
       model: "dall-e-3",
       prompt,
+      size: "1024x1024",
+      quality: "standard",
       n: 1,
-      size: "1024x1024"
     });
 
     const imageUrl = response.data[0].url;
-    res.json({ image_url: imageUrl });
-  } catch (error) {
-    console.error("OpenAI error:", error);
-    res.status(500).json({ error: "Image generation failed." });
+    res.json({ imageUrl });
+  } catch (err) {
+    console.error("Image generation error:", err.message);
+    res.status(500).json({ error: "Image generation failed" });
   }
 });
 
-app.listen(port, () => {
-  console.log(`✅ Server running on port ${port}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server running...");
 });
 
 
