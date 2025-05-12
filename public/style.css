@@ -1,139 +1,97 @@
 body {
   margin: 0;
   padding: 0;
-  background: #000;
+  background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  overflow: hidden;
 }
 
 .generator-container {
-  border: 2px solid #007bff;
-  padding: 10px;
   width: 100%;
   max-width: 500px;
-  margin: 0 auto;
+  border: 2px solid #007bff;
+  padding: 10px;
   box-sizing: border-box;
-  border-radius: 6px;
-  background: #111;
 }
 
-.image-box {
+.output-box {
   width: 100%;
   height: 500px;
-  background-color: #fff;
-  border-radius: 6px;
-  overflow: hidden;
+  background-color: #111;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #333;
-  margin-bottom: 10px;
+  align-items: center;
+  position: relative;
+  border: 1px solid #555;
 }
 
-.image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.output-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-.placeholder {
-  color: #666;
-  font-size: 1rem;
-  padding: 0 10px;
-  text-align: center;
-}
-
-.button-row {
+.controls {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
+  margin: 15px 0;
 }
 
 button {
-  flex: 1;
+  width: 48%;
   padding: 10px;
+  font-size: 1rem;
   font-weight: bold;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #007bff;
+  border-radius: 5px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button:hover {
-  background: #0056cc;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .form-group {
-  margin-bottom: 8px;
+  margin-top: 10px;
 }
 
 input[type="text"] {
   width: 100%;
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #007bff;
   font-size: 1rem;
+  background: #fff;
+  color: #000;
+  border: 1px solid #007bff;
+  border-radius: 5px;
   box-sizing: border-box;
 }
 
-#save-container {
-  margin-top: 8px;
+/* Loading Spinner */
+.spinner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border: 4px solid #fff;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.hidden {
   display: none;
 }
 
-#save-btn {
-  width: 100%;
-  background-color: #28a745;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-#subscription-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.popup {
-  background: #111;
-  border: 2px solid #007bff;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  width: 90%;
-  max-width: 300px;
-}
-
-.popup h2 {
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.popup p {
-  color: #aaa;
-  margin-bottom: 15px;
-  font-size: 0.95rem;
-}
-
-.pay-btn {
-  background: #007bff;
-  padding: 10px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-
 
