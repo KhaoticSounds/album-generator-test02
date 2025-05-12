@@ -8,22 +8,38 @@
 </head>
 <body>
   <div class="generator-container">
-    
+
     <!-- Output Box -->
-    <div class="output-box">
-      <img id="cover-image" src="" alt="Your album cover will appear here.">
-      <div id="loading-spinner" class="spinner hidden"></div>
+    <div class="output-wrapper">
+      <div id="image-output">
+        <span class="placeholder-text">Your album cover will appear here.</span>
+        <div class="spinner" id="spinner" style="display: none;"></div>
+        <img id="advisory-img" src="https://i.imgur.com/51Qxq7y.png" alt="Parental Advisory" style="display: none;" class="advisory-overlay">
+      </div>
     </div>
 
-    <!-- Button Row -->
-    <div class="controls">
+    <!-- Controls Row -->
+    <div class="controls-row">
+      <button id="generate-btn">Generate</button>
       <button id="toggle-advisor">Advisor: Off</button>
-      <button onclick="generateCover()">Generate</button>
     </div>
 
     <!-- Prompt Input -->
-    <div class="form-group">
-      <input type="text" id="prompt" placeholder="Describe your album cover idea...">
+    <input type="text" id="prompt" placeholder="Describe your album cover idea...">
+
+    <!-- Parental Advisory Toggle -->
+    <button id="toggle-advisory">Parental Advisory: Off</button>
+
+    <!-- Save Button -->
+    <button id="save-btn" style="display: none;">Save Cover</button>
+
+    <!-- Premium Popup -->
+    <div id="premium-popup" style="display: none;">
+      <div class="popup-content">
+        <h3>🔥 Unlock Unlimited Covers</h3>
+        <p>One free try every hour. Get unlimited access now:</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Pay with PayPal</a>
+      </div>
     </div>
 
   </div>
