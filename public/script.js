@@ -8,8 +8,13 @@ document.getElementById("generate-btn").addEventListener("click", () => {
     return;
   }
 
-  const prompt = document.getElementById("prompt").value;
+  const prompt = document.getElementById("prompt").value.trim();
   const outputBox = document.getElementById("image-output");
+
+  if (!prompt) {
+    outputBox.textContent = "Please enter a description first.";
+    return;
+  }
 
   outputBox.textContent = "Generating your cover...";
 
@@ -20,22 +25,26 @@ document.getElementById("generate-btn").addEventListener("click", () => {
   })
     .then(res => res.json())
     .then(data => {
-      const img = document.createElement("img");
-      img.src = data.image_url;
-      img.alt = "Generated Cover";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      outputBox.innerHTML = "";
-      outputBox.appendChild(img);
+      if (data.image_url) {
+        const img = document.createElement("img");
+        img.src = data.image_url;
+        img.alt = "Generated Album Cover";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        outputBox.innerHTML = "";
+        outputBox.appendChild(img);
 
-      generationCount++;
+        generationCount++;
 
-      if (subscribed) {
-        document.getElementById("save-container").style.display = "block";
+        if (subscribed) {
+          document.getElementById("save-container").style.display = "block";
+        }
+      } else {
+        outputBox.textContent = "No image returned. Try again.";
       }
     })
     .catch(() => {
-      outputBox.textContent = "Something went wrong.";
+      outputBox.textContent = "Something went wrong while generating.";
     });
 });
 
