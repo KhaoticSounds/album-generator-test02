@@ -1,14 +1,19 @@
 {
-  "name": "album-cover-generator",
+  "name": "khaoticsounds-test00",
   "version": "1.0.0",
-  "type": "module",
+  "description": "KhaoticSounds Test00 Lyrics Generator",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "openai": "^4.20.0"
-  }
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "keywords": [],
+  "author": "KhaosWorld",
+  "license": "MIT"
 }
