@@ -1,58 +1,13 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: #000;
-  color: #fff;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
-
-.generator-container {
-  max-width: 540px;
-  width: 100%;
-  border: 2px solid #007bff;
-  border-radius: 10px;
-  padding: 15px;
-  background-color: #000;
-}
-
-.output-wrapper {
-  width: 100%;
-  height: 500px;
-  border: 2px dashed #444;
-  background: #111;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-#image-output img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.placeholder-text {
-  color: #555;
-  font-size: 16px;
-  text-align: center;
-}
-
 .controls-row {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 10px;
   margin-top: 15px;
+  flex-wrap: wrap;
 }
 
-.controls-row button {
+.controls-row button,
+#reference-img {
   flex: 1;
   padding: 10px;
   font-weight: bold;
@@ -61,115 +16,25 @@ body {
   border: 2px solid #007bff;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
 }
 
-.controls-row button:hover {
-  background: #007bff;
+#reference-img {
+  padding: 8px;
+  background: #111;
   color: #fff;
+  font-size: 0.9rem;
+  border: 2px dashed #007bff;
 }
 
-#prompt {
-  margin-top: 10px;
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #555;
-  color: #000;
-}
-
-#save-btn {
-  margin-top: 10px;
-  width: 100%;
-  padding: 10px;
-  font-weight: bold;
-  background: #fff;
-  color: #000;
-  border: 2px solid #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.spinner {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  width: 28px;
-  height: 28px;
-  border: 4px solid #007bff;
-  border-left: 4px solid transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* Reaffirm advisory image */
 #advisory-img {
   position: absolute;
   bottom: 10px;
   right: 10px;
   width: 100px;
   opacity: 0.85;
+  display: none;
 }
 
-/* 🔥 Premium Pop-Up Redesign */
-.premium-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 30, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.premium-box {
-  background: linear-gradient(180deg, #001f3f, #000);
-  border: 2px solid #00aaff;
-  padding: 30px 20px;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 0 20px #00aaff;
-  width: 90%;
-  max-width: 320px;
-}
-
-.glow-header {
-  font-size: 20px;
-  font-weight: bold;
-  color: #00ccff;
-  text-shadow: 0 0 10px #00ccff;
-  margin-bottom: 10px;
-}
-
-.premium-desc {
-  font-size: 14px;
-  color: #eee;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-.paypal-btn {
-  background: #0070ba;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-block;
-  box-shadow: 0 0 10px #0070ba;
-  transition: background 0.3s ease;
-}
-
-.paypal-btn:hover {
-  background: #009be1;
-  box-shadow: 0 0 15px #009be1;
-}
 
