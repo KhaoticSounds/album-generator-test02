@@ -66,18 +66,10 @@ body {
   text-align: center;
 }
 
-.controls-row button:hover {
-  background: #007bff;
-  color: #fff;
-}
-
 #reference-img {
-  padding: 8px;
-  background: #111;
-  color: #fff;
-  font-size: 0.9rem;
-  border: 2px dashed #007bff;
-  cursor: pointer;
+  background: #fff;
+  color: #000;
+  font-size: 0.95rem;
 }
 
 #prompt {
@@ -129,7 +121,7 @@ body {
   display: none;
 }
 
-/* 🔥 Premium Pop-Up Redesign */
+/* 🔥 Premium Pop-Up */
 .premium-popup {
   position: fixed;
   top: 0;
@@ -185,3 +177,4 @@ body {
   background: #009be1;
   box-shadow: 0 0 15px #009be1;
 }
+
