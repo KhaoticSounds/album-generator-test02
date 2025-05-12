@@ -54,4 +54,3 @@ generateBtn.addEventListener("click", async () => {
 copyBtn.addEventListener("click", () => {
   navigator.clipboard.writeText(lyricsOutput.textContent);
 });
-
