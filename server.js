@@ -11,8 +11,16 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
+// Debug logs to verify if server receives the prompt
 app.post("/api/cover", async (req, res) => {
   const { prompt } = req.body;
+
+  console.log("▶️ Received prompt:", prompt);
+
+  if (!prompt || prompt.length < 3) {
+    console.warn("⚠️ Invalid or empty prompt received.");
+    return res.status(400).json({ error: "Prompt is too short or missing." });
+  }
 
   try {
     const response = await openai.images.generate({
@@ -22,15 +30,17 @@ app.post("/api/cover", async (req, res) => {
       n: 1
     });
 
-    res.json({ imageUrl: response.data[0].url });
+    const imageUrl = response.data[0]?.url;
+    console.log("✅ Image URL returned:", imageUrl);
+
+    res.json({ imageUrl });
   } catch (err) {
-    console.error("Error generating image:", err.message);
-    res.status(500).json({ error: "Image generation failed" });
+    console.error("❌ OpenAI image generation failed:", err.message);
+    res.status(500).json({ error: "Image generation failed. Check API key or prompt." });
   }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Server running on port 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
-
-
