@@ -19,20 +19,18 @@ app.post("/api/cover", async (req, res) => {
       model: "dall-e-3",
       prompt,
       size: "1024x1024",
-      quality: "standard",
-      n: 1,
+      n: 1
     });
 
-    const imageUrl = response.data[0].url;
-    res.json({ imageUrl });
+    res.json({ imageUrl: response.data[0].url });
   } catch (err) {
-    console.error("Image generation error:", err.message);
+    console.error("Error generating image:", err.message);
     res.status(500).json({ error: "Image generation failed" });
   }
 });
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Server running...");
+  console.log("Server running on port 3000");
 });
 
 
