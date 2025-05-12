@@ -68,9 +68,9 @@ html, body {
 }
 
 #prompt {
-  width: 100%;
+  width: 90%;
   padding: 10px;
-  font-size: 8rem;
+  font-size: 3rem;
   border-radius: 5px;
   border: 1px solid #555;
   color: #000;
