@@ -2,8 +2,11 @@ let generationCount = 0;
 let subscribed = false;
 let advisorOn = false;
 
+// Replace with your owner email or ID check if needed
+const isOwner = true; // Set to false for public users
+
 document.getElementById("generate-btn").addEventListener("click", () => {
-  if (generationCount >= 1 && !subscribed) {
+  if (generationCount >= 1 && !subscribed && !isOwner) {
     document.getElementById("subscription-overlay").style.display = "flex";
     return;
   }
@@ -12,11 +15,11 @@ document.getElementById("generate-btn").addEventListener("click", () => {
   const outputBox = document.getElementById("image-output");
 
   if (!prompt) {
-    outputBox.textContent = "Please enter a description first.";
+    outputBox.innerHTML = "<span class='placeholder'>Please enter a description first.</span>";
     return;
   }
 
-  outputBox.textContent = "Generating your cover...";
+  outputBox.innerHTML = "<span class='placeholder'>Generating...</span>";
 
   fetch("/api/generate-image", {
     method: "POST",
@@ -28,23 +31,20 @@ document.getElementById("generate-btn").addEventListener("click", () => {
       if (data.image_url) {
         const img = document.createElement("img");
         img.src = data.image_url;
-        img.alt = "Generated Album Cover";
-        img.style.width = "100%";
-        img.style.height = "100%";
+        img.alt = "Album Cover";
         outputBox.innerHTML = "";
         outputBox.appendChild(img);
 
         generationCount++;
-
-        if (subscribed) {
+        if (subscribed || isOwner) {
           document.getElementById("save-container").style.display = "block";
         }
       } else {
-        outputBox.textContent = "No image returned. Try again.";
+        outputBox.innerHTML = "<span class='placeholder'>No image returned. Try again.</span>";
       }
     })
     .catch(() => {
-      outputBox.textContent = "Something went wrong while generating.";
+      outputBox.innerHTML = "<span class='placeholder'>Something went wrong.</span>";
     });
 });
 
