@@ -1,21 +1,10 @@
-let nextAllowedTime = 0;
-
 const generateBtn = document.getElementById("generate-btn");
 const promptInput = document.getElementById("prompt");
 const imageOutput = document.getElementById("image-output");
 const spinner = document.getElementById("spinner");
 const saveBtn = document.getElementById("save-btn");
-const premiumPopup = document.getElementById("premium-popup");
 
 generateBtn.onclick = async () => {
-  console.log("🟢 Generate clicked");
-
-  const now = Date.now();
-  if (now < nextAllowedTime) {
-    premiumPopup.style.display = "flex";
-    return;
-  }
-
   const prompt = promptInput.value.trim();
   if (!prompt) return alert("Please enter a prompt");
 
@@ -23,20 +12,17 @@ generateBtn.onclick = async () => {
   spinner.style.display = "block";
   imageOutput.innerHTML = "";
   imageOutput.appendChild(spinner);
+  saveBtn.style.display = "none";
 
   try {
     const response = await fetch("/api/cover", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify({ prompt }),
     });
 
     const data = await response.json();
-    console.log("🧠 OpenAI Response:", data);
-
-    if (!data.imageUrl) {
-      throw new Error("No image returned");
-    }
+    if (!data.imageUrl) throw new Error("No image returned");
 
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -49,12 +35,13 @@ generateBtn.onclick = async () => {
       saveBtn.style.display = "block";
     };
 
-    nextAllowedTime = Date.now() + 30 * 60 * 1000;
-
+    img.onerror = () => {
+      throw new Error("Image failed to load");
+    };
   } catch (err) {
     spinner.style.display = "none";
-    console.error("❌ Image generation failed:", err);
-    imageOutput.innerHTML = `<span class="placeholder-text">Failed to generate image. Try again.</span>`;
+    console.error("❌ Generation error:", err);
+    imageOutput.innerHTML = `<span class="placeholder-text">Failed to generate image.</span>`;
   }
 };
 
@@ -63,10 +50,9 @@ saveBtn.onclick = () => {
   if (!img) return;
 
   const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
   canvas.width = img.naturalWidth;
   canvas.height = img.naturalHeight;
+  const ctx = canvas.getContext("2d");
 
   const tempImg = new Image();
   tempImg.crossOrigin = "anonymous";
@@ -81,6 +67,6 @@ saveBtn.onclick = () => {
   };
 
   tempImg.onerror = () => {
-    alert("Download failed. Try again.");
+    alert("Download failed.");
   };
 };
